@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using etiqa.Dal;
 
@@ -10,9 +11,11 @@ using etiqa.Dal;
 namespace etiqa.Dal.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240529173519_AddRoleName")]
+    partial class AddRoleName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,7 +97,7 @@ namespace etiqa.Dal.Migrations
                             Id = 1,
                             Email = "admin@cdn.com",
                             Hobby = "",
-                            PasswordHash = "AC1XHllJIPsNdFmHJUjvTMLiW9Tr0GsoJmhv97TQh9Eiw9STWVVFfiAAO46LcEVNVw==",
+                            PasswordHash = "Admin@123",
                             PhoneNumber = "1234567890",
                             Role = "Admin",
                             Skillsets = "",

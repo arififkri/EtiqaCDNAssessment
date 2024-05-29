@@ -11,8 +11,8 @@ using etiqa.Dal;
 namespace etiqa.Dal.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240529145330_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240529175053_EncryptAdminPassword")]
+    partial class EncryptAdminPassword
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,18 @@ namespace etiqa.Dal.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "User"
+                        });
                 });
 
             modelBuilder.Entity("etiqa.Domain.Model.User", b =>
@@ -61,62 +73,36 @@ namespace etiqa.Dal.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Skillsets")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("skillsets")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
 
-            modelBuilder.Entity("etiqa.Domain.Model.UserRole", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("UserRoles");
-                });
-
-            modelBuilder.Entity("etiqa.Domain.Model.UserRole", b =>
-                {
-                    b.HasOne("etiqa.Domain.Model.Role", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("etiqa.Domain.Model.User", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("etiqa.Domain.Model.Role", b =>
-                {
-                    b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("etiqa.Domain.Model.User", b =>
-                {
-                    b.Navigation("UserRoles");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "admin@cdn.com",
+                            Hobby = "",
+                            PasswordHash = "AC1XHllJIPsNdFmHJUjvTMLiW9Tr0GsoJmhv97TQh9Eiw9STWVVFfiAAO46LcEVNVw==",
+                            PhoneNumber = "1234567890",
+                            Role = "Admin",
+                            Skillsets = "",
+                            UserName = "Admin"
+                        });
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,7 @@
 ﻿
 using etiqa.Domain.Abstraction.Repositories;
 using etiqa.Domain.Model;
+using Microsoft.AspNet.Identity;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -23,7 +24,12 @@ namespace etiqa.Dal.Repositories
         public async Task<User> DeleteUserAsync(int userId)
         {
             var user = _appDbContext.Users.FirstOrDefault(x => x.Id == userId);
-        
+
+            if (user == null)
+            {
+                throw new Exception($"User with Id {userId} not found.");
+            }
+
             _appDbContext.Users.Remove(user);
             await _appDbContext.SaveChangesAsync();
             return user;
@@ -31,10 +37,26 @@ namespace etiqa.Dal.Repositories
 
         public async Task<User> EditUserAsync(User user)
         {
-            _appDbContext.Users.Update(user);
+            var existingUser = _appDbContext.Users.FirstOrDefault(x => x.UserName == user.UserName);
+            if (existingUser == null)
+            {
+                throw new Exception($"User with Username {user.UserName} not found.");
+            }
+
+            existingUser.UserName = user.UserName;
+            existingUser.Email = user.Email;
+            existingUser.PhoneNumber = user.PhoneNumber;
+            existingUser.Skillsets = user.Skillsets;
+            existingUser.Hobby = user.Hobby;
+            if (!string.IsNullOrEmpty(user.PasswordHash))
+            {
+                existingUser.PasswordHash = new PasswordHasher().HashPassword(user.PasswordHash);
+            }
+
+            _appDbContext.Users.Update(existingUser);
             await _appDbContext.SaveChangesAsync();
 
-            return user;
+            return existingUser;
         }
 
         public async Task<User> GetUserAsync(int id)

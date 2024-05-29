@@ -47,20 +47,22 @@ namespace etiqaAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditUserAsync(EditUserDto editUser)
         {
             var user = _mapper.Map<User>(editUser);
-            var result =  _userRepository.EditUserAsync(user);
+            var result = await _userRepository.EditUserAsync(user);
 
             return Ok(result);
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(int userId)
         {
-            var result = _userRepository.DeleteUserAsync(userId);
+            var result = await _userRepository.DeleteUserAsync(userId);
 
-            return Ok();
+            return Ok("User delete successfully.");
         }
 
 

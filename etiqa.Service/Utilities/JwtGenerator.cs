@@ -8,17 +8,15 @@ namespace etiqa.Service.Utilities
 {
     public class JwtGenerator
     {
-        public static string GenerateUserToken(string username)
+        public static string GenerateUserToken(string username, string role)
         {
-            var claims = new Claim[]
+            var claims = new[]
             {
-
-                new Claim(ClaimTypes.Name, username)
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, role)
             };
 
             return GenerateToken(claims, DateTime.UtcNow.AddDays(1));
-
-
         }
 
 

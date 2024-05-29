@@ -44,6 +44,10 @@ namespace etiqaAPI
                     });
             });
 
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+            });
 
             var secret = Environment.GetEnvironmentVariable("JWT_SECRET");
             var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
@@ -58,9 +62,10 @@ namespace etiqaAPI
                     opts.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret)),
+                        ValidateIssuer = true,
                         ValidIssuer = issuer,
-                        ValidateAudience = false,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret))
+                        ValidateAudience = false
                     };
                 });
             var app = builder.Build();
