@@ -9,8 +9,6 @@ namespace etiqa.Domain.Abstraction.Repositories
 
         Task<ICollection<User>> GetUsersAsync();
 
-        Task<User> CreateUserAsync(User user);
-
         Task<User> EditUserAsync(User user);
 
         Task<User> DeleteUserAsync(int userId);

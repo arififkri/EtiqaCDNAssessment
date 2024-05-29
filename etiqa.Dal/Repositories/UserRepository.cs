@@ -14,13 +14,6 @@ namespace etiqa.Dal.Repositories
             _appDbContext = appDbContext;
         }
 
-        public async Task<User> CreateUserAsync(User user)
-        {
-             _appDbContext.Users.Add(user);
-             await _appDbContext.SaveChangesAsync();
-             return user;
-        }
-
         public async Task<User> DeleteUserAsync(int userId)
         {
             var user = _appDbContext.Users.FirstOrDefault(x => x.Id == userId);
